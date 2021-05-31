@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.FinishActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBarFN"
+        app:title="Mua Hàng Thành Công"
+        android:background="#ee4d2d"
+        app:titleTextColor="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+    </androidx.appcompat.widget.Toolbar>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cảm ơn bạn đã chọn mua hàng tại Shopii!!!"
+        android:layout_gravity="center"
+        android:layout_marginTop="50sp"
+        android:textColor="#000"
+        android:textSize="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thông tin của bạn"
+        android:layout_gravity="center"
+        android:layout_marginTop="20sp"
+        android:textColor="#ee4d2d"
+        android:textSize="20dp"/>
+    <LinearLayout
+        android:weightSum="3"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="70dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Họ Tên: "
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:id="@+id/TenFN"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Nam Phung"
+            android:textSize="20dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:weightSum="3"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="SĐT: "
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:id="@+id/sdtFN"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0981198521"
+            android:textSize="20dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:weightSum="3"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ: "
+            android:textSize="20dp"/>
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:id="@+id/diachiFN"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Hà Nội"
+            android:textSize="20dp"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnFN"
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Xác Nhận"/>
+
+</LinearLayout>

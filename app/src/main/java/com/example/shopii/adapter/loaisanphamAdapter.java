@@ -60,6 +60,7 @@ public class loaisanphamAdapter extends BaseAdapter {
         }else{
             viewHolder = (ViewHolder) view.getTag();
         }
+        // set san pham vao view
         loaisanpham loaisp = (loaisanpham) getItem(position);
         viewHolder.txtTenLoaiSp.setText(loaisp.getTenloaisanpham());
         Picasso.with(context).load(loaisp.getHinhanh())

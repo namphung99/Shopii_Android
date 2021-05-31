@@ -1,6 +1,7 @@
 package com.example.shopii.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.shopii.Activity.ChiTietSanPhamActivity;
 import com.example.shopii.R;
 import com.example.shopii.model.Sanpham;
+import com.example.shopii.ultil.checkConnection;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -60,6 +63,17 @@ public class SanphamAdapter extends RecyclerView.Adapter<SanphamAdapter.ItemHold
             imghinhsanpham = (ImageView) itemView.findViewById(R.id.imgviewsp);
             txtgiasanpham = (TextView) itemView.findViewById((R.id.textviewgiasanpham));
             txttensanpham = (TextView) itemView.findViewById(R.id.textviewtensanpham);
+
+            itemView.setOnClickListener(new View.OnClickListener() { // bắt sự kiện click vào sản phẩm
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ChiTietSanPhamActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("thongTinSanPham", arraysanpham.get(getAdapterPosition()));
+                    checkConnection.showToast_Short(context, arraysanpham.get(getAdapterPosition()).getTensanpham());
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

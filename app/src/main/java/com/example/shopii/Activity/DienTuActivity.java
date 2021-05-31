@@ -1,11 +1,21 @@
     package com.example.shopii.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.shopii.ultil.checkConnection;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.appcompat.widget.Toolbar;
 
@@ -36,6 +46,10 @@ import java.util.Map;
     ArrayList<Sanpham> mangdt;
     int idDT = 0;
     int page = 1;
+    View footerView; // thanh processbar
+    boolean isLoading = false;
+    boolean limitData = false;
+    mHandler mHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,16 +59,64 @@ import java.util.Map;
             getIDLoaisp();
             ActionToolBar();
             GetData(page);
+            LoadMoreData();
         }
         else{
             checkConnection.showToast_Short(getApplicationContext(),"Vui lòng kiểm tra lại kết nối Internet");
             finish();
         }
+
+
     }
+
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) { // tao menu gio hang
+            getMenuInflater().inflate(R.menu.menu_giohang, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(@NonNull MenuItem item) { // bat su kien click gio hang
+            switch (item.getItemId()){
+                case R.id.menugiohang:
+                    Intent intent = new Intent(getApplicationContext(),GioHangActivity.class);
+                    startActivity(intent);
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+        private void LoadMoreData() {
+
+            lvdt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getApplicationContext(),ChiTietSanPhamActivity.class);
+                    intent.putExtra("thongTinSanPham", mangdt.get(position));
+                    startActivity(intent);
+                }
+            });
+            lvdt.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                @Override
+                // kéo xem thêm sp
+                public void onScroll(AbsListView view, int firstItem, int visibleItem, int totalItem) {
+//                    kiểm tra còn dl thì gọi
+                    if(firstItem + visibleItem == totalItem && totalItem != 0 && isLoading == false && limitData == false){
+                        isLoading = true;
+                        ThreadData threadData = new ThreadData();
+                        threadData.start();
+                    }
+                }
+            });
+        }
 
         private void GetData(int Page) {
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            String URL_DT = Server.DuongDanDienTu+String.valueOf(Page);
+            String URL_DT = Server.DuongDanDienTu+String.valueOf(Page); // add page vào đường dẫn
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DT, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -65,7 +127,8 @@ import java.util.Map;
                     String Mota = "";
                     int Idspdt = 0;
 
-                    if(response != null){
+                    if(response != null && response.length() != 2){
+                        lvdt.removeFooterView(footerView);
                         try {
                             JSONArray jsonArray= new JSONArray(response);
                             for (int i = 0; i< jsonArray.length();i++){
@@ -82,6 +145,10 @@ import java.util.Map;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                    }else{
+                        limitData = true;
+                        lvdt.removeFooterView(footerView);
+                        checkConnection.showToast_Short(getApplicationContext(),"Hết dữ liệu");
                     }
                 }
             }, new Response.ErrorListener() {
@@ -94,14 +161,16 @@ import java.util.Map;
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     HashMap<String,String> param = new HashMap<String,String>();
-                    param.put("idsanpham",String.valueOf(idDT));
+
+                    param.put("idsanpham",String.valueOf(idDT)); // put thêm id sản phẩm vào đường đẫn
+
                     return param;
                 }
             };
             requestQueue.add(stringRequest);
         }
 
-        private void ActionToolBar() {
+        private void ActionToolBar() { // trở về trang trước
         setSupportActionBar(toolbardt);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbardt.setNavigationOnClickListener(new View.OnClickListener() {
@@ -115,14 +184,50 @@ import java.util.Map;
 
         private void getIDLoaisp() {
             idDT = getIntent().getIntExtra("idloaisanpham", -1);
-            Log.d("gia tri loai sp", idDT+"");
         }
 
         private void InitView() {
             toolbardt = findViewById(R.id.toolbarDienTu);
             lvdt = findViewById(R.id.listViewDienTu);
             mangdt = new ArrayList<>();
+            //  gửi dữ liệu qua dienTuAdapter để truyền vào activity.xml
             dienTuAdapter = new DienTuAdapter(getApplicationContext(), mangdt);
             lvdt.setAdapter(dienTuAdapter);
+
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            footerView = inflater.inflate(R.layout.progressbar, null);
+
+            mHandler = new mHandler();
+        }
+
+        public class mHandler extends Handler{ // Handler phân bổ luồng cho Thread
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                switch (msg.what){
+                    case 0:
+                        lvdt.addFooterView(footerView);
+                        break;
+                    case 1:
+                        GetData(++page);
+                        isLoading = false; // is loading =  false để load thêm dl
+                        break;
+                }
+                super.handleMessage(msg);
+            }
+        }
+
+        public class ThreadData extends Thread{
+            @Override
+            public void run() {
+                mHandler.sendEmptyMessage(0); // ban đầu start gán = 0
+                try {
+                    Thread.sleep(3000); // sau 3s
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Message message = mHandler.obtainMessage(1); // load thêm dl gán = 1
+                mHandler.sendMessage(message);
+                super.run();
+            }
         }
     }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "908070763861",
+    "project_id": "authshopiicompleted",
+    "storage_bucket": "authshopiicompleted.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908070763861:android:a7d24c4df9fa3de08c43dc",
+        "android_client_info": {
+          "package_name": "com.example.shopii"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908070763861-mhukn6fuu3d8s1scflkg2ih8uudr8hgk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8O5YgFsCqK29_VxDhB3Uxu7EAnGDdhCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908070763861-mhukn6fuu3d8s1scflkg2ih8uudr8hgk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

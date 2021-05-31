@@ -1,5 +1,6 @@
 package com.example.shopii.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -8,7 +9,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -23,7 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.shopii.R;
 import com.example.shopii.adapter.SanphamAdapter;
 import com.example.shopii.adapter.loaisanphamAdapter;
-import com.example.shopii.db.DBHelper;
+import com.example.shopii.model.Giohang;
 import com.example.shopii.model.Sanpham;
 import com.example.shopii.model.loaisanpham;
 import com.example.shopii.ultil.Server;
@@ -52,13 +57,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Sanpham> mangsanpham;
     SanphamAdapter sanphamAdapter;
 
+    public static ArrayList<Giohang> mangGiohang; // luu cac san pham duoc them vao gio hang truyen den cac man hinh
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        DBHelper.getInstance(this); // kich hoat DB
-
         InitID();
         if(checkConnection.haveNetworkConnection(getApplicationContext())){
             ActionBar();
@@ -73,6 +77,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) { // tao menu gio hang
+        getMenuInflater().inflate(R.menu.menu_giohang, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) { // bat su kien click gio hang
+        switch (item.getItemId()){
+            case R.id.menugiohang:
+                Intent intent = new Intent(getApplicationContext(),GioHangActivity.class);
+                startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // bắt sự kiên menu gửi qua activity tương ứng
     private void CatchOnItemListView() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,6 +130,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 3:
                         if(checkConnection.haveNetworkConnection(getApplicationContext())){
+//                            Uri gmmIntentUri = Uri.parse("geo:20.980580626381805,105.78815495100864");
+//                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                            mapIntent.setPackage("com.google.android.apps.maps");
+//                            startActivity(mapIntent);
                             Intent intent = new Intent(MainActivity.this, LienHeActivity.class);
                             startActivity(intent);
                         }else {
@@ -133,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void GetDuLieuSPMoiNhat() {
+//        ket noi server
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.DuowngDanSPMoiNhat, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -170,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void GetDuLieuLoaisp() {
+    private void GetDuLieuLoaisp() { // add Menu
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.DuongDanLoaiSp, new Response.Listener<JSONArray>() {
             @Override
@@ -188,8 +215,8 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    mangloaisp.add(3, new loaisanpham(0,"Liên Hệ","https://i2.wp.com/icons.iconarchive.com/icons/graphicloads/100-flat/256/phone-icon.png"));
-                    mangloaisp.add(4, new loaisanpham(0,"Thông Tin","https://i.pinimg.com/originals/43/d8/21/43d821d6b6d6e6c2424a9415a8e00ed0.png"));
+                    mangloaisp.add(3, new loaisanpham(0,"Địa Chỉ","https://i.pinimg.com/originals/43/d8/21/43d821d6b6d6e6c2424a9415a8e00ed0.png"));
+                    mangloaisp.add(4, new loaisanpham(0,"Thông Tin","https://i2.wp.com/icons.iconarchive.com/icons/graphicloads/100-flat/256/phone-icon.png"));
                 }
             }
         }, new Response.ErrorListener() {
@@ -219,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         viewFlipper.setAutoStart(true);
     }
 
-    private void ActionBar() {
+    private void ActionBar() { // open menu
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_menu_24);
@@ -239,7 +266,10 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listViewTrangChu);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         mangloaisp = new ArrayList<>();
+
+//        Trang chu
         mangloaisp.add(0, new loaisanpham(0,"Trang Chủ","https://sites.google.com/site/khoivinhphankhoivinhseo/_/rsrc/1489649407204/noi-bat/cac-mau-tick-icon-dep/home.png"));
+
         loaisanphamAdapter = new loaisanphamAdapter(mangloaisp, getApplicationContext());
         listView.setAdapter(loaisanphamAdapter);
         mangsanpham = new ArrayList<>();
@@ -247,5 +277,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
         recyclerView.setAdapter(sanphamAdapter);
+
+        if(mangGiohang != null){ // khong tao mang moi
+
+            Log.d("hello", String.valueOf(mangGiohang));
+        }else{
+            mangGiohang =  new ArrayList<>();
+        }
     }
 }
