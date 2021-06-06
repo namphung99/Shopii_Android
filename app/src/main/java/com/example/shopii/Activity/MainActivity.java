@@ -5,13 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,13 +23,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.shopii.R;
-import com.example.shopii.adapter.SanphamAdapter;
-import com.example.shopii.adapter.loaisanphamAdapter;
+import com.example.shopii.adapter.SanPhamMoiNhatAdapter;
+import com.example.shopii.adapter.menusanphamAdapter;
 import com.example.shopii.model.Giohang;
 import com.example.shopii.model.Sanpham;
-import com.example.shopii.model.loaisanpham;
+import com.example.shopii.model.listMenu;
 import com.example.shopii.ultil.Server;
-import com.example.shopii.ultil.checkConnection;
+import com.example.shopii.ultil.showToast;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -47,15 +44,13 @@ public class MainActivity extends AppCompatActivity {
     ViewFlipper viewFlipper;
     RecyclerView recyclerView;
     NavigationView navigationView;
-    ListView listView;
+    ListView listView, lvSPmoinhat;
     DrawerLayout drawerLayout;
-    ArrayList<loaisanpham> mangloaisp;
-    loaisanphamAdapter loaisanphamAdapter;
+    ArrayList<listMenu> arrayMenu;
+    menusanphamAdapter menusanphamAdapter;
 
-    int id = 0;
-    String tenloaisp = "", hinhanhloaisp = "";
     ArrayList<Sanpham> mangsanpham;
-    SanphamAdapter sanphamAdapter;
+    SanPhamMoiNhatAdapter sanphamAdapter;
 
     public static ArrayList<Giohang> mangGiohang; // luu cac san pham duoc them vao gio hang truyen den cac man hinh
 
@@ -64,17 +59,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         InitID();
-        if(checkConnection.haveNetworkConnection(getApplicationContext())){
-            ActionBar();
-            ActionViewFlipper();
-            GetDuLieuLoaisp();
-            GetDuLieuSPMoiNhat();
-            CatchOnItemListView();
-        }
-        else {
-            checkConnection.showToast_Short(getApplicationContext(),"Vui lòng kiểm tra lại kết nối!");
-            finish();
-        }
+        ActionBar();
+        ActionViewFlipper();
+        GetDuLieuSPMoiNhat();
+        CatchOnItemListView();
+
     }
 
     @Override
@@ -100,55 +89,32 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        if(checkConnection.haveNetworkConnection(getApplicationContext())){
-                            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }else {
-                            checkConnection.showToast_Short(getApplicationContext(),"Kiểm tra lại kết nối Internet");
-                        }
+                        startActivity(new Intent(MainActivity.this, MainActivity.class));
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case 1:
-                        if(checkConnection.haveNetworkConnection(getApplicationContext())){
-                            Intent intent = new Intent(MainActivity.this, DienTuActivity.class);
-                            intent.putExtra("idloaisanpham",mangloaisp.get(position).getId());
-                            startActivity(intent);
-                        }else {
-                            checkConnection.showToast_Short(getApplicationContext(),"Kiểm tra lại kết nối Internet");
-                        }
+                        Intent intentDT = new Intent(MainActivity.this, DienTuActivity.class);
+                        intentDT.putExtra("idloaisanpham",arrayMenu.get(position).getId());
+                        startActivity(intentDT);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case 2:
-                        if(checkConnection.haveNetworkConnection(getApplicationContext())){
-                            Intent intent = new Intent(MainActivity.this, ThoiTrangActivity.class);
-                            intent.putExtra("idloaisanpham",mangloaisp.get(position).getId());
-                            startActivity(intent);
-                        }else {
-                            checkConnection.showToast_Short(getApplicationContext(),"Kiểm tra lại kết nối Internet");
-                        }
+                        Intent intentTT = new Intent(MainActivity.this, ThoiTrangActivity.class);
+                        intentTT.putExtra("idloaisanpham",arrayMenu.get(position).getId());
+                        startActivity(intentTT);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case 3:
-                        if(checkConnection.haveNetworkConnection(getApplicationContext())){
-//                            Uri gmmIntentUri = Uri.parse("geo:20.980580626381805,105.78815495100864");
-//                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//                            mapIntent.setPackage("com.google.android.apps.maps");
-//                            startActivity(mapIntent);
-                            Intent intent = new Intent(MainActivity.this, LienHeActivity.class);
-                            startActivity(intent);
-                        }else {
-                            checkConnection.showToast_Short(getApplicationContext(),"Kiểm tra lại kết nối Internet");
-                        }
+                        startActivity(new Intent(MainActivity.this, SearchActivity.class));
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+                    case 4:
+                        startActivity(new Intent(MainActivity.this, LienHeActivity.class));
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
-                    case 4:
-                        if(checkConnection.haveNetworkConnection(getApplicationContext())){
-                            Intent intent = new Intent(MainActivity.this, ThongTinActivity.class);
-                            startActivity(intent);
-                        }else {
-                            checkConnection.showToast_Short(getApplicationContext(),"Kiểm tra lại kết nối Internet");
-                        }
+                    case 5:
+                        startActivity(new Intent(MainActivity.this, ThongTinActivity.class));
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
@@ -161,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 //        ket noi server
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.DuowngDanSPMoiNhat, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.URLSPMoiNhat, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 if(response != null){
@@ -197,36 +163,6 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void GetDuLieuLoaisp() { // add Menu
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.DuongDanLoaiSp, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                if(response != null) {
-                    for (int i = 0; i < response.length(); i++) {
-                        try {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            id = jsonObject.getInt("id");
-                            tenloaisp = jsonObject.getString("tenloaisanpham");
-                            hinhanhloaisp = jsonObject.getString("hinhanhloaisanpham");
-                            mangloaisp.add(new loaisanpham(id, tenloaisp, hinhanhloaisp));
-                            loaisanphamAdapter.notifyDataSetChanged();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    mangloaisp.add(3, new loaisanpham(0,"Địa Chỉ","https://i.pinimg.com/originals/43/d8/21/43d821d6b6d6e6c2424a9415a8e00ed0.png"));
-                    mangloaisp.add(4, new loaisanpham(0,"Thông Tin","https://i2.wp.com/icons.iconarchive.com/icons/graphicloads/100-flat/256/phone-icon.png"));
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                checkConnection.showToast_Short(getApplicationContext(), error.toString());
-            }
-        });
-        requestQueue.add(jsonArrayRequest);
-    }
 
     private void ActionViewFlipper() {
         ArrayList<String> Slide = new ArrayList<>();
@@ -261,26 +197,38 @@ public class MainActivity extends AppCompatActivity {
     private  void InitID(){
         toolbar = (Toolbar) findViewById(R.id.toolbarTrangChu);
         viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        lvSPmoinhat = findViewById(R.id.lvSPmoinhat);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         listView = (ListView) findViewById(R.id.listViewTrangChu);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
-        mangloaisp = new ArrayList<>();
+        arrayMenu = new ArrayList<>();
 
-//        Trang chu
-        mangloaisp.add(0, new loaisanpham(0,"Trang Chủ","https://sites.google.com/site/khoivinhphankhoivinhseo/_/rsrc/1489649407204/noi-bat/cac-mau-tick-icon-dep/home.png"));
+        arrayMenu.add(0, new listMenu(0,"Trang Chủ","https://sites.google.com/site/khoivinhphankhoivinhseo/_/rsrc/1489649407204/noi-bat/cac-mau-tick-icon-dep/home.png"));
+        arrayMenu.add(1, new listMenu(1,"Công Nghệ","https://baabrand.com/wp-content/uploads/2018/12/icon-thiet-ke-linh-vuc-logo-thuong-hieu-cong-nghe-cao-digital-thong-tin-baa-brand-1.png"));
+        arrayMenu.add(2, new listMenu(2,"Thời Trang","https://baabrand.com/wp-content/uploads/2018/12/icon-thiet-ke-linh-vuc-logo-thuong-hieu-thoi-trang-my-pham-lam-dep-spa-baa-brand-1-400x400.png"));
+        arrayMenu.add(3, new listMenu(0,"Tìm Kiếm","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWHP1pfR3hQvzBzF75oIJMQq0u-45jw2TXKQ&usqp=CAU"));
+        arrayMenu.add(4, new listMenu(0,"Liên Hệ","https://i.pinimg.com/originals/43/d8/21/43d821d6b6d6e6c2424a9415a8e00ed0.png"));
+        arrayMenu.add(5, new listMenu(0,"Thông Tin","http://www.click2sciencepd.org/sites/default/files/images/User-Icons-orange-2.png"));
 
-        loaisanphamAdapter = new loaisanphamAdapter(mangloaisp, getApplicationContext());
-        listView.setAdapter(loaisanphamAdapter);
+        menusanphamAdapter = new menusanphamAdapter(arrayMenu, getApplicationContext());
+        listView.setAdapter(menusanphamAdapter);
+
         mangsanpham = new ArrayList<>();
-        sanphamAdapter = new SanphamAdapter(getApplicationContext(), mangsanpham);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
-        recyclerView.setAdapter(sanphamAdapter);
+        sanphamAdapter = new SanPhamMoiNhatAdapter(getApplicationContext(), mangsanpham);
+        lvSPmoinhat.setAdapter(sanphamAdapter);
+        lvSPmoinhat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), ChiTietSanPhamActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("thongTinSanPham", mangsanpham.get(position));
+                showToast.showToast_Short(getApplicationContext(), mangsanpham.get(position).getTensanpham());
+                startActivity(intent);
+            }
+        });
 
         if(mangGiohang != null){ // khong tao mang moi
 
-            Log.d("hello", String.valueOf(mangGiohang));
         }else{
             mangGiohang =  new ArrayList<>();
         }

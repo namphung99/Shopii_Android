@@ -9,17 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.shopii.R;
-import com.example.shopii.model.loaisanpham;
+import com.example.shopii.model.listMenu;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class loaisanphamAdapter extends BaseAdapter {
+public class menusanphamAdapter extends BaseAdapter {
 
-    ArrayList<loaisanpham> arrayListLoaisp;
+    ArrayList<listMenu> arrayListLoaisp;
     Context context;
 
-    public loaisanphamAdapter(ArrayList<loaisanpham> arrayListLoaisp, Context context) {
+    public menusanphamAdapter(ArrayList<listMenu> arrayListLoaisp, Context context) {
         this.arrayListLoaisp = arrayListLoaisp;
         this.context = context;
     }
@@ -61,10 +61,10 @@ public class loaisanphamAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         // set san pham vao view
-        loaisanpham loaisp = (loaisanpham) getItem(position);
-        viewHolder.txtTenLoaiSp.setText(loaisp.getTenloaisanpham());
-        Picasso.with(context).load(loaisp.getHinhanh())
-                .placeholder(R.drawable.lap)
+        listMenu listMenu = (listMenu) getItem(position);
+        viewHolder.txtTenLoaiSp.setText(listMenu.getTen());
+        Picasso.with(context).load(listMenu.getHinhanh())
+                .placeholder(R.drawable.empty)
                 .error(R.drawable.empty)
                 .into(viewHolder.imgLoaiSp);
         return view;

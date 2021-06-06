@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.shopii.R;
@@ -25,21 +26,21 @@ public class ThoiTrangAdapter extends BaseAdapter {
         this.arrayThoiTrang = arrayThoiTrang;
     }
 
-    public Context getContext() {
-        return context;
-    }
+//    public Context getContext() {
+//        return context;
+//    }
+//
+//    public void setContext(Context context) {
+//        this.context = context;
+//    }
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    public ArrayList<Sanpham> getArrayThoiTrang() {
-        return arrayThoiTrang;
-    }
-
-    public void setArrayThoiTrang(ArrayList<Sanpham> arrayThoiTrang) {
-        this.arrayThoiTrang = arrayThoiTrang;
-    }
+//    public ArrayList<Sanpham> getArrayThoiTrang() {
+//        return arrayThoiTrang;
+//    }
+//
+//    public void setArrayThoiTrang(ArrayList<Sanpham> arrayThoiTrang) {
+//        this.arrayThoiTrang = arrayThoiTrang;
+//    }
 
     @Override
     public int getCount() {
@@ -62,15 +63,16 @@ public class ThoiTrangAdapter extends BaseAdapter {
     }
     @Override
     public View getView(int position, View view, ViewGroup parent) {
+
         ViewHolder viewHolder = null;
         if (view == null){
             viewHolder= new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.dong_thoitrang, null);
-            viewHolder.txtTenThoiTrang = (TextView) view.findViewById(R.id.textviewTenThoiTrang);
-            viewHolder.txtGiaThoiTrang = (TextView) view.findViewById(R.id.textViewGiaThoiTrang);
-            viewHolder.txtMoTaThoiTrang = (TextView) view.findViewById(R.id.textViewMoTaThoiTrang);
-            viewHolder.imgThoiTrang = (ImageView) view.findViewById(R.id.imageViewThoiTrang);
+            view = inflater.inflate(R.layout.dong_sanpham, null);
+            viewHolder.txtTenThoiTrang = (TextView) view.findViewById(R.id.textviewTen);
+            viewHolder.txtGiaThoiTrang = (TextView) view.findViewById(R.id.textViewGia);
+            viewHolder.txtMoTaThoiTrang = (TextView) view.findViewById(R.id.textViewMoTa);
+            viewHolder.imgThoiTrang = (ImageView) view.findViewById(R.id.imageView);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) view.getTag();

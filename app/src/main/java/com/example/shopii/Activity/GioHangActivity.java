@@ -6,7 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.shopii.R;
 import com.example.shopii.adapter.GioHangAdapter;
-import com.example.shopii.ultil.checkConnection;
+import com.example.shopii.ultil.showToast;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,10 +52,10 @@ public class GioHangActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(MainActivity.mangGiohang.size() > 0){
-                    Intent intent = new Intent(getApplicationContext(), ThongTinKHActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), ThanhToanActivity.class);
                     startActivity(intent);
                 }else{
-                    checkConnection.showToast_Short(getApplicationContext(), "Giỏ hàng trống!");
+                    showToast.showToast_Short(getApplicationContext(), "Giỏ hàng trống!");
                 }
             }
         });
@@ -75,18 +75,12 @@ public class GioHangActivity extends AppCompatActivity {
                         if(MainActivity.mangGiohang.size() <= 0){
                             txtThongbao.setVisibility(View.VISIBLE);
                         }else {
-                            MainActivity.mangGiohang.remove(position);
+                            MainActivity.mangGiohang.remove(position); // xoa
                             gioHangAdapter.notifyDataSetChanged();
                             EvenUtil();
                             if(MainActivity.mangGiohang.size() <= 0){
                                 txtThongbao.setVisibility(View.VISIBLE);
                             }
-//                            else {
-//                                MainActivity.mangGiohang.remove(position);
-//                                txtThongbao.setVisibility(View.INVISIBLE);
-//                                gioHangAdapter.notifyDataSetChanged();
-//                                EvenUtil();
-//                            }
                         }
                     }
                 });

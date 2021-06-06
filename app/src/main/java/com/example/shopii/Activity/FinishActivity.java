@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.shopii.R;
-import com.example.shopii.ultil.checkConnection;
+import com.example.shopii.ultil.showToast;
 
 public class FinishActivity extends AppCompatActivity {
     Button btnXacNhan;
@@ -28,7 +28,7 @@ public class FinishActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
-                checkConnection.showToast_Short(getApplicationContext(), "Đặt hàng thành công!");
+                showToast.showToast_Short(getApplicationContext(), "Đặt hàng thành công!");
                 MainActivity.mangGiohang.clear(); // sau khi mua hàng sẽ xóa dl khỏi giỏ hàng
             }
         });

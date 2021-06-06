@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.shopii.R;
+import com.example.shopii.ultil.showToast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -76,11 +77,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(),"Đăng nhập thành công",Toast.LENGTH_LONG).show();
+                    showToast.showToast_Short(getApplicationContext(), "Đăng nhập thành công");
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(getApplicationContext(),"Đăng nhập không thành công",Toast.LENGTH_LONG).show();
+                    showToast.showToast_Short(getApplicationContext(), "Đăng nhập thất bại");
                 }
             }
         });

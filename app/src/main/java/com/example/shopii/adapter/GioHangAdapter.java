@@ -45,7 +45,7 @@ public class GioHangAdapter extends BaseAdapter {
     public class ViewHolder {
         public TextView tenGioHang, giaGioHang, value;
         public ImageView imgGioHang;
-        public Button btnminus, btnplus;
+        public Button btnminus, btnplus, btndelete;
     }
 
     @Override

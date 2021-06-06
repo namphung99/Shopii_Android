@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.shopii.R;
 import com.example.shopii.model.User;
+import com.example.shopii.ultil.showToast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -85,18 +86,18 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
 
                                     if(task.isSuccessful()){
-                                        Toast.makeText(RegisterActivity.this,"Đăng ký thành công!",Toast.LENGTH_LONG).show();
+                                        showToast.showToast_Short(getApplicationContext(),"Đăng ký thành công!");
                                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                         startActivity(intent);
                                     }
                                     else {
-                                        Toast.makeText(RegisterActivity.this,"Đăng ký thất bại!",Toast.LENGTH_LONG).show();
+                                        showToast.showToast_Short(getApplicationContext(),"Đăng ký thất bại!");
                                     }
                                 }
                             });
                         }
                         else{
-                            Toast.makeText(RegisterActivity.this,"Đăng ký thất bại!",Toast.LENGTH_LONG).show();
+                            showToast.showToast_Short(getApplicationContext(),"Đăng ký thất bại!");
                         }
                     }
                 });

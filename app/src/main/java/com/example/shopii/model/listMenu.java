@@ -1,12 +1,12 @@
 package com.example.shopii.model;
 
-public class loaisanpham {
+public class listMenu {
     public int Id;
-    public String tenloaisanpham, hinhanh;
+    public String ten, hinhanh;
 
-    public loaisanpham(int id, String tenloaisanpham, String hinhanh) {
+    public listMenu(int id, String ten, String hinhanh) {
         Id = id;
-        this.tenloaisanpham = tenloaisanpham;
+        this.ten = ten;
         this.hinhanh  = hinhanh;
     }
 
@@ -18,12 +18,12 @@ public class loaisanpham {
         Id = id;
     }
 
-    public String getTenloaisanpham() {
-        return tenloaisanpham;
+    public String getTen() {
+        return ten;
     }
 
-    public void setTenloaisanpham(String tenloaisanpham) {
-        this.tenloaisanpham = tenloaisanpham;
+    public void setTen(String ten) {
+        this.ten = ten;
     }
 
     public String getHinhanh() {

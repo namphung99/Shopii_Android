@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.SearchActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/ToolbarSearch"
+        android:background="#ee4d2d"
+        app:titleTextColor="#fff"
+        app:title="Tìm Kiếm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></androidx.appcompat.widget.Toolbar>
+    <LinearLayout
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="10dp"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_margin="5dp"
+                android:id="@+id/editTextSearch"
+                android:inputType="text"
+                android:hint="Từ Khóa..."
+                android:textSize="16dp"
+                android:background="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/searchbtn"
+            android:text="Search"
+            android:layout_weight="1"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lọc theo mức giá: "
+            android:textSize="18dp"
+            android:textColor="#000"/>
+
+        <Spinner
+            android:id="@+id/spinnerSearch"
+            android:layout_marginLeft="20dp"
+            android:layout_width="240dp"
+            android:layout_height="31dp"
+            android:layout_margin="3dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/spinner"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/txtthongbao"
+            android:text="Không tìm thấy sản phẩm!!!"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:textColor="#DD0909"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ListView
+            android:id="@+id/lvSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+    </FrameLayout>
+
+</LinearLayout>

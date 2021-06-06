@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Shopii"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.ForgotPasswordActivity"></activity>
+        <activity android:name=".Activity.SearchActivity"></activity>
+        <activity android:name=".Activity.ForgotPasswordActivity" />
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.MainActivity" />
         <!--
@@ -38,7 +39,7 @@
             android:name=".Activity.LienHeActivity"
             android:label="@string/title_activity_lien_he" />
         <activity android:name=".Activity.FinishActivity" />
-        <activity android:name=".Activity.ThongTinKHActivity" />
+        <activity android:name=".Activity.ThanhToanActivity" />
         <activity android:name=".Activity.GioHangActivity" />
         <activity android:name=".Activity.ChiTietSanPhamActivity" />
         <activity android:name=".Activity.ThongTinActivity" />

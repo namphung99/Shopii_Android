@@ -1,24 +1,18 @@
 package com.example.shopii.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,19 +20,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.shopii.R;
-import com.example.shopii.adapter.DienTuAdapter;
 import com.example.shopii.adapter.ThoiTrangAdapter;
 import com.example.shopii.model.Sanpham;
 import com.example.shopii.ultil.Server;
-import com.example.shopii.ultil.checkConnection;
+import com.example.shopii.ultil.showToast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ThoiTrangActivity extends AppCompatActivity {
     Toolbar toolbarThoitrang;
@@ -46,26 +37,16 @@ public class ThoiTrangActivity extends AppCompatActivity {
     ThoiTrangAdapter thoiTrangAdapter;
     ArrayList<Sanpham> mangthoitrang;
     int idthoitrang = 0;
-    int page = 1;
-    View footerView;
-    boolean isLoading = false;
-    boolean limitData = false;
-    mHandler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thoi_trang);
-        if(checkConnection.haveNetworkConnection(getApplicationContext())) {
-            InitView();
-            getIDLoaisp();
-            ActionToolBar();
-            GetData(page);
-            LoadMoreData();
-        }else{
-            checkConnection.showToast_Short(getApplicationContext(), "Kiểm trai lại kết nối Internet!");
-            finish();
-        }
+
+        InitView();
+        getIDLoaisp();
+        ActionToolBar();
+        GetData(idthoitrang);
     }
 
     @Override
@@ -86,8 +67,8 @@ public class ThoiTrangActivity extends AppCompatActivity {
 
     private void GetData(int Page) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String URL_DT = Server.DuongDanDienTu+String.valueOf(Page);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_DT, new Response.Listener<String>() {
+        String URL_TT = Server.URLSanPham + String.valueOf(idthoitrang);
+        StringRequest stringRequest = new StringRequest(URL_TT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 int id =0;
@@ -97,8 +78,7 @@ public class ThoiTrangActivity extends AppCompatActivity {
                 String Mota = "";
                 int IdspThoitrang = 0;
 
-                if(response != null && response.length() != 2){
-                    lvthoitrang.removeFooterView(footerView);
+                if(response != null){
                     try {
                         JSONArray jsonArray= new JSONArray(response);
                         for (int i = 0; i< jsonArray.length();i++){
@@ -116,9 +96,7 @@ public class ThoiTrangActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }else{
-                    limitData = true;
-                    lvthoitrang.removeFooterView(footerView);
-                    checkConnection.showToast_Short(getApplicationContext(),"Hết dữ liệu");
+                    showToast.showToast_Short(getApplicationContext(),"Kiểm tra lại");
                 }
             }
         }, new Response.ErrorListener() {
@@ -126,42 +104,8 @@ public class ThoiTrangActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
             }
-        }){
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> param = new HashMap<String,String>();
-                param.put("idsanpham",String.valueOf(idthoitrang));
-                return param;
-            }
-        };
+        });
         requestQueue.add(stringRequest);
-    }
-    private void LoadMoreData() {
-
-        lvthoitrang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(),ChiTietSanPhamActivity.class);
-                intent.putExtra("thongTinSanPham", mangthoitrang.get(position));
-                startActivity(intent);
-            }
-        });
-        lvthoitrang.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstItem, int visibleItem, int totalItem) {
-                if(firstItem + visibleItem == totalItem && totalItem != 0 && isLoading == false && limitData == false){
-                    isLoading = true;
-                    ThreadData threadData = new ThreadData();
-                    threadData.start();
-                }
-            }
-        });
     }
     private void InitView() {
         toolbarThoitrang = findViewById(R.id.toolbarThoiTrang);
@@ -170,10 +114,17 @@ public class ThoiTrangActivity extends AppCompatActivity {
         thoiTrangAdapter = new ThoiTrangAdapter(getApplicationContext(), mangthoitrang);
         lvthoitrang.setAdapter(thoiTrangAdapter);
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        footerView = inflater.inflate(R.layout.progressbar, null);
+        lvthoitrang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), ChiTietSanPhamActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("thongTinSanPham", mangthoitrang.get(position));
+                showToast.showToast_Short(getApplicationContext(), mangthoitrang.get(position).getTensanpham());
+                startActivity(intent);
+            }
+        });
 
-        mHandler = new mHandler();
     }
     private void getIDLoaisp() {
         idthoitrang = getIntent().getIntExtra("idloaisanpham", -1);
@@ -189,35 +140,5 @@ public class ThoiTrangActivity extends AppCompatActivity {
             }
         });
 
-    }
-    public class mHandler extends Handler {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
-                case 0:
-                    lvthoitrang.addFooterView(footerView);
-                    break;
-                case 1:
-                    GetData(++page);
-                    isLoading = false;
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    }
-
-    public class ThreadData extends Thread{
-        @Override
-        public void run() {
-            mHandler.sendEmptyMessage(0);
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Message message = mHandler.obtainMessage(1);
-            mHandler.sendMessage(message);
-            super.run();
-        }
     }
 }

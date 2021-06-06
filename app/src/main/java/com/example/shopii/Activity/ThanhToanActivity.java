@@ -1,40 +1,23 @@
 package com.example.shopii.Activity;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.shopii.R;
-import com.example.shopii.ultil.Server;
-import com.example.shopii.ultil.checkConnection;
+import com.example.shopii.ultil.showToast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class ThongTinKHActivity extends AppCompatActivity {
+public class ThanhToanActivity extends AppCompatActivity {
     EditText editTenKH, editTextdiachi, editTextsodienthoai;
     Button btnXacNhan, btnTrove;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_thong_tin_k_h);
+        setContentView(R.layout.activity_thanhtoan);
         InitView();
         btnTrove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,12 +25,7 @@ public class ThongTinKHActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        if(checkConnection.haveNetworkConnection(getApplicationContext())){
-            EventBtn(); // click Xac Nhan
-        }else {
-            checkConnection.showToast_Short(getApplicationContext(), "Kiểm tra lại kết nối Internet!");
-        }
+        EventBtn(); // click Xac Nhan
     }
 
     private void EventBtn() {
@@ -64,9 +42,9 @@ public class ThongTinKHActivity extends AppCompatActivity {
                     intent.putExtra("sdt", sdt);
                     intent.putExtra("diachi", diachi);
                     startActivity(intent);
-                    checkConnection.showToast_Short(getApplicationContext(),"Xác nhận đơn hàng");
+                    showToast.showToast_Short(getApplicationContext(),"Xác nhận đơn hàng");
                 }else{
-                    checkConnection.showToast_Short(getApplicationContext(),"Vui lòng nhập đầy đủ thông tin");
+                    showToast.showToast_Short(getApplicationContext(),"Vui lòng nhập đầy đủ thông tin");
                 }
             }
         });

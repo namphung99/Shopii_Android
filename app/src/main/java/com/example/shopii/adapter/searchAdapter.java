@@ -16,39 +16,23 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class DienTuAdapter extends BaseAdapter {
+public class searchAdapter extends BaseAdapter {
     Context context;
-    ArrayList<Sanpham> arrayDienTu;
+    ArrayList<Sanpham> arraySanPham;
 
-    public DienTuAdapter(Context context, ArrayList<Sanpham> arrayDienTu) {
+    public searchAdapter(Context context, ArrayList<Sanpham> arraySanPham) {
         this.context = context;
-        this.arrayDienTu = arrayDienTu;
+        this.arraySanPham = arraySanPham;
     }
-
-//    public Context getContext() {
-//        return context;
-//    }
-//
-//    public void setContext(Context context) {
-//        this.context = context;
-//    }
-
-//    public ArrayList<Sanpham> getArrayDienTu() {
-//        return arrayDienTu;
-//    }
-//
-//    public void setArrayDienTu(ArrayList<Sanpham> arrayDienTu) {
-//        this.arrayDienTu = arrayDienTu;
-//    }
 
     @Override
     public int getCount() {
-        return arrayDienTu.size();
+        return arraySanPham.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return arrayDienTu.get(position);
+        return arraySanPham.get(position);
     }
 
     @Override
@@ -57,8 +41,8 @@ public class DienTuAdapter extends BaseAdapter {
     }
 
     public class ViewHolder{
-        public TextView txtTenDienTu, txtGiaDienTu, txtMoTaDienTu;
-        public ImageView imgDienTu;
+        public TextView txtTen, txtGia, txtMoTa;
+        public ImageView img;
     }
     @Override
     public View getView(int position, View view, ViewGroup parent) {
@@ -67,25 +51,27 @@ public class DienTuAdapter extends BaseAdapter {
             viewHolder= new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.dong_sanpham, null);
-            viewHolder.txtTenDienTu = (TextView) view.findViewById(R.id.textviewTen);
-            viewHolder.txtGiaDienTu = (TextView) view.findViewById(R.id.textViewGia);
-            viewHolder.txtMoTaDienTu = (TextView) view.findViewById(R.id.textViewMoTa);
-            viewHolder.imgDienTu = (ImageView) view.findViewById(R.id.imageView);
+            viewHolder.txtTen = (TextView) view.findViewById(R.id.textviewTen);
+            viewHolder.txtGia = (TextView) view.findViewById(R.id.textViewGia);
+            viewHolder.txtMoTa = (TextView) view.findViewById(R.id.textViewMoTa);
+            viewHolder.img = (ImageView) view.findViewById(R.id.imageView);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) view.getTag();
         }
+
         Sanpham sanpham = (Sanpham) getItem(position);
-        viewHolder.txtTenDienTu.setText(sanpham.getTensanpham());
+        viewHolder.txtTen.setText(sanpham.getTensanpham());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        viewHolder.txtGiaDienTu.setText("Giá: " +decimalFormat.format(sanpham.getGiasanpham()) + " VNĐ");
-        viewHolder.txtMoTaDienTu.setMaxLines(2);
-        viewHolder.txtMoTaDienTu.setEllipsize(TextUtils.TruncateAt.END);
-        viewHolder.txtMoTaDienTu.setText(sanpham.getMotasanpham());
+        viewHolder.txtGia.setText("Giá: " +decimalFormat.format(sanpham.getGiasanpham()) + " VNĐ");
+        viewHolder.txtMoTa.setMaxLines(2);
+        viewHolder.txtMoTa.setEllipsize(TextUtils.TruncateAt.END);
+        viewHolder.txtMoTa.setText(sanpham.getMotasanpham());
+
         Picasso.with(context).load(sanpham.getHinhanhsanpham())
                 .placeholder(R.drawable.empty)
                 .error(R.drawable.empty)
-                .into(viewHolder.imgDienTu);
+                .into(viewHolder.img);
         return view;
     }
 }

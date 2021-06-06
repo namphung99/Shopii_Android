@@ -34,7 +34,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
     int giaChitiet = 0;
     String hinhanh = "";
     String motaSP = "";
-    int idsanpham = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +117,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
         giaChitiet = sanpham.getGiasanpham();
         hinhanh =  sanpham.getHinhanhsanpham();
         motaSP = sanpham.getMotasanpham();
-        idsanpham = sanpham.getIDsanpham();
+
 
         ten.setText(TenChitiet);
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");

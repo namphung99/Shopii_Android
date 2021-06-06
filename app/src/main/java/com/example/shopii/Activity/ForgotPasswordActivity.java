@@ -5,13 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.shopii.R;
-import com.example.shopii.ultil.checkConnection;
+import com.example.shopii.ultil.showToast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,10 +58,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    checkConnection.showToast_Short(getApplicationContext(),"Kiểm tra email của bạn");
+                    showToast.showToast_Short(getApplicationContext(),"Kiểm tra email của bạn");
                 }
                 else {
-                    checkConnection.showToast_Short(getApplicationContext(),"Vui lòng thử lại");
+                    showToast.showToast_Short(getApplicationContext(),"Vui lòng thử lại");
                 }
             }
         });

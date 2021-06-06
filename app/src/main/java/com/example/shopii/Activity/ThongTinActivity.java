@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.example.shopii.R;
 import com.example.shopii.model.User;
-import com.example.shopii.ultil.checkConnection;
+import com.example.shopii.ultil.showToast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -70,7 +70,7 @@ public class ThongTinActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                checkConnection.showToast_Short(getApplicationContext(),"Something wrong");
+                showToast.showToast_Short(getApplicationContext(),"Something wrong");
             }
         });
     }
