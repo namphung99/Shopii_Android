@@ -118,7 +118,6 @@ public class ThoiTrangActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ChiTietSanPhamActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("thongTinSanPham", mangthoitrang.get(position));
                 showToast.showToast_Short(getApplicationContext(), mangthoitrang.get(position).getTensanpham());
                 startActivity(intent);

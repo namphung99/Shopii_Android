@@ -42,7 +42,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     ViewFlipper viewFlipper;
-    RecyclerView recyclerView;
     NavigationView navigationView;
     ListView listView, lvSPmoinhat;
     DrawerLayout drawerLayout;
@@ -220,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ChiTietSanPhamActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("thongTinSanPham", mangsanpham.get(position));
                 showToast.showToast_Short(getApplicationContext(), mangsanpham.get(position).getTensanpham());
                 startActivity(intent);

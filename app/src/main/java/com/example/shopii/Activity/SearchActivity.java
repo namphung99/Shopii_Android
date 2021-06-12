@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,12 +51,79 @@ public class SearchActivity extends AppCompatActivity {
         ActionToolBar();
         ActionSearch();
         CatchSpinnerEvent();
+//        onFilter();
+    }
+
+    private void onFilter() {
+        int giaFilter = Integer.parseInt(spinnerSearch.getSelectedItem().toString());
+        arraySearch.clear();
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Server.URLGetAll, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                int id =0;
+                String Ten = "";
+                int gia = 0;
+                String Hinhanh = "";
+                String Mota = "";
+                int Idsp = 0;
+
+                if(response != null){
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i<jsonArray.length(); i++){
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            gia = jsonObject.getInt("giasanpham");
+                            if(gia <= giaFilter) {
+                                id = jsonObject.getInt("id");
+                                Ten = jsonObject.getString("tensanpham");
+                                Hinhanh = jsonObject.getString("hinhanhsanpham");
+                                Mota = jsonObject.getString("motasanpham");
+                                Idsp = jsonObject.getInt("idsanpham");
+                                arraySearch.add(new Sanpham(id,Ten,gia,Hinhanh,Mota,Idsp));
+                            }
+                        }
+                        if(arraySearch.isEmpty()){
+                            thongbao.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            thongbao.setVisibility(View.INVISIBLE);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    searchAdapter.notifyDataSetChanged();
+                }
+                else{
+                    showToast.showToast_Short(getApplicationContext(),"Kiểm tra lại");
+                    thongbao.setVisibility(View.VISIBLE);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                showToast.showToast_Short(getApplicationContext(), error.toString());
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     private void CatchSpinnerEvent() {
-        Integer[] gia = new Integer[]{1,2,3,4,5,6,7,8,9,10};
+        Integer[] gia = new Integer[]{30000000,20000000,10000000,5000000,1000000,500000};
         ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item,gia);
         spinnerSearch.setAdapter(arrayAdapter);
+
+        spinnerSearch.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                onFilter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void ActionSearch() {
@@ -94,7 +162,6 @@ public class SearchActivity extends AppCompatActivity {
                                         Mota = jsonObject.getString("motasanpham");
                                         Idsp = jsonObject.getInt("idsanpham");
                                         arraySearch.add(new Sanpham(id,Ten,gia,Hinhanh,Mota,Idsp));
-                                       searchAdapter.notifyDataSetChanged();
                                     }
                                     if(arraySearch.isEmpty()){
                                         thongbao.setVisibility(View.VISIBLE);
@@ -105,6 +172,7 @@ public class SearchActivity extends AppCompatActivity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                searchAdapter.notifyDataSetChanged();
                             }
                             else{
                                 showToast.showToast_Short(getApplicationContext(),"Kiểm tra lại");
@@ -114,7 +182,7 @@ public class SearchActivity extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            showToast.showToast_Short(getApplicationContext(), error.toString());
                         }
                     });
                     requestQueue.add(stringRequest);

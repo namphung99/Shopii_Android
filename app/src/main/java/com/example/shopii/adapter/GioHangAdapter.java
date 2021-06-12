@@ -45,7 +45,7 @@ public class GioHangAdapter extends BaseAdapter {
     public class ViewHolder {
         public TextView tenGioHang, giaGioHang, value;
         public ImageView imgGioHang;
-        public Button btnminus, btnplus, btndelete;
+        public Button btnminus, btnplus;
     }
 
     @Override
@@ -111,8 +111,8 @@ public class GioHangAdapter extends BaseAdapter {
                 DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
                 finalViewHolder.giaGioHang.setText("Giá: " + decimalFormat.format(giaMoiNhat) +"VNĐ");
 
-                GioHangActivity.EvenUtil();
-                if(slMoiNhat > 9){
+                GioHangActivity.TotalMoney();
+                if(slMoiNhat >= 10){
                     finalViewHolder.btnplus.setVisibility(View.INVISIBLE);
                     finalViewHolder.btnminus.setVisibility(View.VISIBLE);
                     finalViewHolder.value.setText(String.valueOf(slMoiNhat));
@@ -137,8 +137,8 @@ public class GioHangAdapter extends BaseAdapter {
                 DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
                 finalViewHolder.giaGioHang.setText("Giá: " + decimalFormat.format(giaMoiNhat) +"VNĐ");
 
-                GioHangActivity.EvenUtil();
-                if(slMoiNhat < 2){
+                GioHangActivity.TotalMoney();
+                if(slMoiNhat <= 1){
                     finalViewHolder.btnplus.setVisibility(View.VISIBLE);
                     finalViewHolder.btnminus.setVisibility(View.INVISIBLE);
                     finalViewHolder.value.setText(String.valueOf(slMoiNhat));

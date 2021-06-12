@@ -35,7 +35,7 @@ public class GioHangActivity extends AppCompatActivity {
         InitView();
         ActionToolBar(); // nut tro ve
         CheckData();  // check xem mang co dl hay chua
-        EvenUtil(); // tinh tong tien
+        TotalMoney(); // tinh tong tien
         CatchOnItemListView(); // click vao sp trong gio hang de xoa
         EvenBtn(); // mua hang & tro ve
     }
@@ -77,7 +77,7 @@ public class GioHangActivity extends AppCompatActivity {
                         }else {
                             MainActivity.mangGiohang.remove(position); // xoa
                             gioHangAdapter.notifyDataSetChanged();
-                            EvenUtil();
+                            TotalMoney();
                             if(MainActivity.mangGiohang.size() <= 0){
                                 txtThongbao.setVisibility(View.VISIBLE);
                             }
@@ -89,7 +89,7 @@ public class GioHangActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         gioHangAdapter.notifyDataSetChanged();
-                        EvenUtil();
+                        TotalMoney();
                     }
                 });
 
@@ -99,7 +99,7 @@ public class GioHangActivity extends AppCompatActivity {
         });
     }
 
-    public static void EvenUtil() {
+    public static void TotalMoney() {
         long tongTien = 0;
         for(int i = 0 ;i < MainActivity.mangGiohang.size(); i++){
             tongTien += MainActivity.mangGiohang.get(i).getGiasp();

@@ -141,7 +141,6 @@ import java.util.ArrayList;
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getApplicationContext(), ChiTietSanPhamActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("thongTinSanPham", mangdt.get(position));
                     showToast.showToast_Short(getApplicationContext(), mangdt.get(position).getTensanpham());
                     startActivity(intent);

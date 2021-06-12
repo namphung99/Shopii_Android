@@ -80,6 +80,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
                                 MainActivity.mangGiohang.get(i).setSoluong(10); // chi cho mua 10 sp
                             }
                             MainActivity.mangGiohang.get(i).setGiasp(giaChitiet * MainActivity.mangGiohang.get(i).getSoluong()); // set gia cho sp trong gio hang
+
                             exit = true;
                         }
                     }
