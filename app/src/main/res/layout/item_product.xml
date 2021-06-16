@@ -12,7 +12,7 @@
         <ImageView
             android:id="@+id/imageViewLoaisp"
             android:layout_margin="5dp"
-            android:src="@mipmap/ic_launcher"
+
             android:layout_width="70dp"
             android:layout_height="70dp"/>
 
